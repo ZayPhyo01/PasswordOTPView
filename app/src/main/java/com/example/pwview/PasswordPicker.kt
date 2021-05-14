@@ -1,6 +1,7 @@
 package com.example.pwview
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,6 +15,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import java.lang.StringBuilder
+
 
 class PasswordPicker(context: Context, attributeSet: AttributeSet) :
     LinearLayout(context, attributeSet), TextWatcher {
@@ -29,11 +31,16 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
     private lateinit var edtPw5: AppCompatEditText
     private lateinit var edtPw6: AppCompatEditText
     var isEnableErrorAnimation = true
+    var isEnableErrorStroke = false
 
     init {
         val typeArray =
-            resources.obtainAttributes(attributeSet, intArrayOf(R.attr.enableErrorAnimation))
+            resources.obtainAttributes(
+                attributeSet,
+                intArrayOf(R.attr.enableErrorAnimation, R.attr.enableErrorStroke)
+            )
         isEnableErrorAnimation = typeArray.getBoolean(0, true)
+
         typeArray.recycle()
     }
 
@@ -126,6 +133,8 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
             listOfPwEditText[currentIndex].requestFocus()
 
 
+        } else {
+            currentIndex = listOfPwEditText.size - 1
         }
     }
 

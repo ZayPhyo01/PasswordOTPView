@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_marginTop="24dp"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <com.example.pwview.PasswordPicker
         android:id="@+id/pwPicker"
-        app:enableErrorAnimation = "true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:enableErrorAnimation="true"
+        app:enableErrorStroke="false" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogin"
