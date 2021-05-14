@@ -39,7 +39,10 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
                 attributeSet,
                 intArrayOf(R.attr.enableErrorAnimation, R.attr.enableErrorStroke)
             )
-        isEnableErrorAnimation = typeArray.getBoolean(0, true)
+        isEnableErrorAnimation =
+            typeArray.getBoolean(R.styleable.PasswordPicker_enableErrorAnimation, true)
+        isEnableErrorStroke =
+            typeArray.getBoolean(R.styleable.PasswordPicker_enableErrorStroke, false)
 
         typeArray.recycle()
     }
@@ -132,7 +135,6 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
             enableFocusSlot(currentIndex)
             listOfPwEditText[currentIndex].requestFocus()
 
-
         } else {
             currentIndex = listOfPwEditText.size - 1
         }
@@ -176,6 +178,7 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
             if (e.text.toString().isNotEmpty()) {
                 password.append(e.text)
             } else {
+                if (isEnableErrorStroke)
                 listOfPwEditText[i].background =
                     ContextCompat.getDrawable(context, R.drawable.bg_pw_error)
 
@@ -194,6 +197,7 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
         }
 
     }
+
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
     }
