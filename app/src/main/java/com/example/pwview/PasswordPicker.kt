@@ -162,14 +162,21 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
     fun verify() {
 
         val password = StringBuilder()
+        var didShowAnim = false
         listOfPwEditText.forEachIndexed { i, e ->
             if (e.text.toString().isNotEmpty()) {
                 password.append(e.text)
             } else {
                 listOfPwEditText[i].background =
                     ContextCompat.getDrawable(context, R.drawable.bg_pw_error)
-                if (isEnableErrorAnimation)
-                    startAnimation(i)
+
+                if (isEnableErrorAnimation) {
+                    if (!didShowAnim) {
+                        didShowAnim = true
+                        startAnimation(i)
+                    }
+                }
+
             }
         }
         if (password.length == OTP_MAX) {
