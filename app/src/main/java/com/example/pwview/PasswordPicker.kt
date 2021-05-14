@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import android.util.Log
 import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.BounceInterpolator
@@ -52,7 +53,9 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
 
     override fun onFinishInflate() {
         super.onFinishInflate()
+         LayoutInflater.from(context).inflate(R.layout.password_picker_view , this  ,true)
         createPasswordSlots()
+
         loadAnimation()
         edtPw1.requestFocus()
     }

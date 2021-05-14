@@ -7,8 +7,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <include
-        layout="@layout/password_picker_view"
+    <com.example.pwview.PasswordPicker
         android:layout_width="match_parent"
         android:id="@+id/pwPicker"
         android:layout_height="wrap_content" />
