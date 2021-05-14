@@ -89,7 +89,7 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
 
     private fun unFoucsableAfterFirst(i: Int, e: AppCompatEditText) {
         if (i != 0) {
-
+            e.isFocusableInTouchMode = false
         }
     }
 
@@ -99,9 +99,8 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
 
             e.setOnKeyListener { v, keyCode, event ->
                 if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DEL) {
-                    if (e.text.toString().isEmpty()) {
-                        onTapBackKey()
-                    }
+                    onTapBackKey()
+
                 }
                 false
             }
@@ -136,12 +135,20 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
         this.listener = listener
     }
 
+
+    private fun deleteTextIfExist() {
+        if (listOfPwEditText[currentIndex].text.toString().isNotEmpty()) {
+            listOfPwEditText[currentIndex].setText("")
+        }
+    }
+
     private fun onTapBackKey() {
         disableFocusSlot(currentIndex)
         currentIndex--
         if (currentIndex >= 0) {
             enableFocusSlot(currentIndex)
             listOfPwEditText[currentIndex].requestFocus()
+            deleteTextIfExist()
         } else {
             currentIndex = 0
         }
