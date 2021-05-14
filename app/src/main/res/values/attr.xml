@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="error_color" format="color" />
-    <attr name="length" format="integer"/>
+    <attr name="enableErrorAnimation" format="boolean" />
+
 </resources>

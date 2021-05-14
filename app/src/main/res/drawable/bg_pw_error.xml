@@ -3,6 +3,6 @@
     <corners android:radius="8dp" />
     <solid android:color="@color/otp_background" />
     <stroke
-        android:width="2dp"
-        android:color="#D81A1A" />
+        android:width="1dp"
+        android:color="#DD7070" />
 </shape>

@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.BounceInterpolator
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatEditText
@@ -19,16 +18,25 @@ import java.lang.StringBuilder
 class PasswordPicker(context: Context, attributeSet: AttributeSet) :
     LinearLayout(context, attributeSet), TextWatcher {
 
-    lateinit var edtPw1: AppCompatEditText
-    lateinit var edtPw2: AppCompatEditText
-    lateinit var edtPw3: AppCompatEditText
-    lateinit var edtPw4: AppCompatEditText
-    lateinit var edtPw5: AppCompatEditText
-    lateinit var edtPw6: AppCompatEditText
-
-    interface Listener {
-        fun getSubmitPassword(pw: String)
+    fun interface Listener {
+        fun onComplete(pw: String)
     }
+
+    private lateinit var edtPw1: AppCompatEditText
+    private lateinit var edtPw2: AppCompatEditText
+    private lateinit var edtPw3: AppCompatEditText
+    private lateinit var edtPw4: AppCompatEditText
+    private lateinit var edtPw5: AppCompatEditText
+    private lateinit var edtPw6: AppCompatEditText
+    var isEnableErrorAnimation = true
+
+    init {
+        val typeArray =
+            resources.obtainAttributes(attributeSet, intArrayOf(R.attr.enableErrorAnimation))
+        isEnableErrorAnimation = typeArray.getBoolean(0, true)
+        typeArray.recycle()
+    }
+
 
     private val listOfPwEditText = ArrayList<AppCompatEditText>()
     private val listOfPwAnimation = ArrayList<ObjectAnimator>()
@@ -37,7 +45,7 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
         Log.d("animation size", "${listOfPwEditText.size}")
         listOfPwEditText.forEachIndexed { i, e ->
             Log.d("add $i", "animation")
-            listOfPwAnimation.add(ObjectAnimator.ofFloat(e, "translationX", 0f, 40f , 0f).apply {
+            listOfPwAnimation.add(ObjectAnimator.ofFloat(e, "translationX", 0f, 40f, 0f).apply {
                 interpolator = BounceInterpolator()
 
 
@@ -53,7 +61,7 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
 
     override fun onFinishInflate() {
         super.onFinishInflate()
-         LayoutInflater.from(context).inflate(R.layout.password_picker_view , this  ,true)
+        LayoutInflater.from(context).inflate(R.layout.password_picker_view, this, true)
         createPasswordSlots()
 
         loadAnimation()
@@ -79,9 +87,16 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
         listenPasswordFill()
     }
 
+    private fun unFoucsableAfterFirst(i: Int, e: AppCompatEditText) {
+        if (i != 0) {
+
+        }
+    }
+
     private fun listenPasswordFill() {
         listOfPwEditText.forEachIndexed { i, e ->
             e.addTextChangedListener(this)
+
             e.setOnKeyListener { v, keyCode, event ->
                 if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DEL) {
                     if (e.text.toString().isEmpty()) {
@@ -90,19 +105,28 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
                 }
                 false
             }
-            e.setOnFocusChangeListener { v, hasFocus ->
-                if (hasFocus) {
-                    currentIndex = i
-                }
-            }
+            unFoucsableAfterFirst(i, e)
+
         }
 
     }
 
+    private fun enableFocusSlot(i: Int) {
+        listOfPwEditText[i].isFocusableInTouchMode = true
+    }
+
+    private fun disableFocusSlot(i: Int) {
+        listOfPwEditText[i].isFocusableInTouchMode = false
+    }
+
     private fun goToNext() {
+        disableFocusSlot(currentIndex)
         currentIndex++
         if (currentIndex < listOfPwEditText.size) {
+            enableFocusSlot(currentIndex)
             listOfPwEditText[currentIndex].requestFocus()
+
+
         }
     }
 
@@ -113,9 +137,10 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
     }
 
     private fun onTapBackKey() {
-
+        disableFocusSlot(currentIndex)
         currentIndex--
         if (currentIndex >= 0) {
+            enableFocusSlot(currentIndex)
             listOfPwEditText[currentIndex].requestFocus()
         } else {
             currentIndex = 0
@@ -127,7 +152,7 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
 
     }
 
-    fun verify(): Boolean {
+    fun verify() {
 
         val password = StringBuilder()
         listOfPwEditText.forEachIndexed { i, e ->
@@ -136,14 +161,15 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
             } else {
                 listOfPwEditText[i].background =
                     ContextCompat.getDrawable(context, R.drawable.bg_pw_error)
-                startAnimation(i)
+                if (isEnableErrorAnimation)
+                    startAnimation(i)
             }
         }
-        if (password.length == this.childCount) {
-            listener?.getSubmitPassword(password.toString())
-            return true
+        if (password.length == OTP_MAX) {
+            listener?.onComplete(password.toString())
+
         }
-        return false
+
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
