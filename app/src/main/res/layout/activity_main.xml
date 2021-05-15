@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:layout_marginTop="24dp"
     android:orientation="vertical"
+    android:padding="24dp"
     tools:context=".MainActivity">
 
     <com.example.pwview.PasswordPicker
@@ -19,7 +20,13 @@
         android:id="@+id/btnLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="44dp"
         android:text="login" />
+
+    <com.example.pwview.AnimateEditText
+
+        android:id="@+id/edt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
