@@ -1,12 +1,12 @@
 package com.example.pwview
 
-import android.animation.ObjectAnimator
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
+    lateinit var b: AnimateEditText
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -20,7 +20,12 @@ class MainActivity : AppCompatActivity() {
             pwBox.verify()
 
         }
+        b = findViewById<AnimateEditText>(R.id.edt)
+
+
     }
 
 
 }
+
+

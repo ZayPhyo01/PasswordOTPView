@@ -5,6 +5,11 @@
         <attr name="enableErrorAnimation" format="boolean" />
         <attr name="enableErrorStroke" format="boolean" />
 
+
+    </declare-styleable>
+
+    <declare-styleable name="AnimateEditText">
+        <attr name="enableTypeAnimation" format="boolean"/>
     </declare-styleable>
 
 </resources>
