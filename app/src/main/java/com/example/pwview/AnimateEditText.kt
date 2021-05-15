@@ -10,9 +10,20 @@ import androidx.appcompat.widget.AppCompatEditText
 class AnimateEditText(context: Context, attributeSet: AttributeSet) :
     AppCompatEditText(context, attributeSet), TextWatcher {
 
+    var isEnableAnimation = false
+    var animationDuration = 50L
 
     init {
         isCursorVisible = false
+        resources.obtainAttributes(attributeSet, intArrayOf(R.attr.enableTypeAnimation))
+            .let {
+                val isEnableAnimation =
+                    it.getBoolean(R.styleable.AnimateEditText_enableTypeAnimation, true)
+                if (!isEnableAnimation) {
+                    animationDuration = 0
+                }
+                it
+            }.recycle()
     }
 
     companion object {
@@ -32,7 +43,7 @@ class AnimateEditText(context: Context, attributeSet: AttributeSet) :
     }
 
     fun deleteText() {
-        createAlphaAnimation(text, null, false)
+        createTranslateXAnimation(text, null, false)
     }
 
     fun deleteTextIfNotEmpty() {
@@ -42,18 +53,18 @@ class AnimateEditText(context: Context, attributeSet: AttributeSet) :
     }
 
     override fun setText(text: CharSequence?, type: BufferType?) {
-        createAlphaAnimation(text, type)
+        createTranslateXAnimation(text, type)
     }
 
 
-    private fun createAlphaAnimation(
+    private fun createTranslateXAnimation(
         textInput: CharSequence?,
         type: BufferType?,
         isForward: Boolean = true
     ) {
 
         val anim = ValueAnimator().apply {
-            duration = 50
+            duration = animationDuration
         }
         val spannable = SpannableString(textInput)
 
@@ -84,7 +95,7 @@ class AnimateEditText(context: Context, attributeSet: AttributeSet) :
                 super.setText(spannable, type)
             } else {
                 if (it.animatedFraction == 1f) {
-                    super.setText("" , type)
+                    super.setText("", type)
                 } else if (it.animatedFraction < 1f) {
                     //text will be before delete string
                     Log.d("before delete ", text.toString())
