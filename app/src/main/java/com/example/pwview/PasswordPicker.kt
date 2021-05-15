@@ -149,9 +149,7 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
 
 
     private fun deleteTextIfExist() {
-        if (listOfPwEditText[currentIndex].text.toString().isNotEmpty()) {
-            listOfPwEditText[currentIndex].setText("")
-        }
+        listOfPwEditText[currentIndex].deleteTextIfNotEmpty()
     }
 
     private fun onTapBackKey() {
