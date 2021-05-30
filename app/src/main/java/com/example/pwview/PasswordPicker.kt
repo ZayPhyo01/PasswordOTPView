@@ -3,6 +3,8 @@ package com.example.pwview
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
@@ -15,6 +17,8 @@ import android.view.animation.BounceInterpolator
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
 import java.lang.StringBuilder
 
 
@@ -31,8 +35,10 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
     private lateinit var edtPw4: AnimateEditText
     private lateinit var edtPw5: AnimateEditText
     private lateinit var edtPw6: AnimateEditText
+
     var isEnableErrorAnimation = true
     var isEnableErrorStroke = false
+
 
     init {
         val typeArray =
@@ -45,12 +51,27 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
         isEnableErrorStroke =
             typeArray.getBoolean(R.styleable.PasswordPicker_enableErrorStroke, false)
 
+
         typeArray.recycle()
     }
 
 
     private val listOfPwEditText = ArrayList<AnimateEditText>()
     private val listOfPwAnimation = ArrayList<ObjectAnimator>()
+
+    fun setUpMaterialShapeApperanceModel(modelBuilder: ShapeAppearanceModel.Builder.() -> Unit) {
+        val backgroundMaterialShapeDrawable =
+            MaterialShapeDrawable(ShapeAppearanceModel.Builder().apply(modelBuilder).build())
+
+        listOfPwEditText.forEach {
+            it.background = backgroundMaterialShapeDrawable.apply {
+                fillColor = ColorStateList.valueOf(Color.parseColor("#F0F0F0"))
+                strokeColor = ColorStateList.valueOf(Color.parseColor("#DBDBDB"))
+                strokeWidth = 1f
+            }
+        }
+    }
+
 
     private fun loadAnimation() {
         val sp = SparseArray<String>()
@@ -95,6 +116,7 @@ class PasswordPicker(context: Context, attributeSet: AttributeSet) :
             add(edtPw5)
             add(edtPw6)
         }
+
         listenPasswordFill()
     }
 

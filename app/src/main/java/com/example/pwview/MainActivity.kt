@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.shape.CornerFamily
+import com.google.android.material.shape.CutCornerTreatment
+import com.google.android.material.shape.EdgeTreatment
 
 class MainActivity : AppCompatActivity() {
     lateinit var b: AnimateEditText
@@ -16,10 +19,25 @@ class MainActivity : AppCompatActivity() {
         pwBox.setOnPasswordSubmitListener { pw ->
             Toast.makeText(this, pw, Toast.LENGTH_SHORT).show()
         }
+
+
+
+
+
+        pwBox.setUpMaterialShapeApperanceModel {
+            setAllCornerSizes(18f)
+            setTopRightCorner(CornerFamily.CUT , 28f)
+        }
+
+
+
+
+
         e.setOnClickListener {
             pwBox.verify()
 
         }
+
         b = findViewById<AnimateEditText>(R.id.edt)
 
 
